@@ -1,32 +1,37 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 var vscode = require('vscode');
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
+const METHODS_TO_FOLD_CONFIG_NAME = 'methodsToFold';
+
 function activate(context) {
-  // The command has been defined in the package.json file
-  // Now provide the implementation of the command with  registerCommand
-  // The commandId parameter must match the command field in package.json
-  const specMethodName = vscode.workspace
-    .getConfiguration('foldIt')
-    .get('specMethodName');
-
-  var disposable = vscode.commands.registerCommand('foldit.fold', () => {
-    // The code you place here will be executed every time your command is executed
-    const editor = vscode.window.activeTextEditor;
-    const itLines = findIts(editor.document, specMethodName);
-
-    itLines.forEach(lineNum => {
-      moveCursorTo(editor, lineNum);
-      vscode.commands.executeCommand('editor.fold');
-    });
-  });
-
+  var disposable = vscode.commands.registerCommand('foldit.fold', foldCommand);
   context.subscriptions.push(disposable);
 }
 
-function findIts(doc, specMethodName) {
+function foldCommand() {
+  const methodsToFold = vscode.workspace
+    .getConfiguration('foldIt')
+    .get(METHODS_TO_FOLD_CONFIG_NAME);
+
+  const editor = vscode.window.activeTextEditor;
+
+  const initialPosition = editor.selection.active.line;
+
+  methodsToFold.forEach(l => foldByMethodName(editor, l));
+  moveCursorTo(editor, initialPosition);
+}
+
+function foldByMethodName(editor, methodName) {
+  const itLines = findLineNumbersByString(editor.document, methodName);
+
+  itLines.forEach(l => foldLine(editor, l));
+}
+
+function foldLine(editor, lineNum) {
+  moveCursorTo(editor, lineNum);
+  vscode.commands.executeCommand('editor.fold');
+}
+
+function findLineNumbersByString(doc, specMethodName) {
   const text = doc.getText();
   const itRegEx = new RegExp(`${specMethodName}\\s*\\(`);
 

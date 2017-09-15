@@ -21,10 +21,10 @@
       "type": "object",
       "title": "FoldIt configuration",
       "properties": {
-        "foldIt.specMethodName": {
-          "type": "string",
-          "default": "it",
-          "description": "Name of method to be folded"
+        "foldIt.methodsToFold": {
+          "type": "array",
+          "default": ["it", "before", "beforeEach", "after", "afterEach"],
+          "description": "Name of methods to be folded"
         }
       }
     }
