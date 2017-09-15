@@ -1,0 +1,44 @@
+{
+  "name": "foldit",
+  "displayName": "foldit",
+  "description": "Fold your specs `it` statements",
+  "version": "0.0.1",
+  "publisher": "alexpusch",
+  "engines": {
+    "vscode": "^1.15.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": ["onCommand:foldit.fold"],
+  "main": "./extension",
+  "contributes": {
+    "commands": [
+      {
+        "command": "foldit.fold",
+        "title": "Fold spec methods"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "FoldIt configuration",
+      "properties": {
+        "foldIt.specMethodName": {
+          "type": "string",
+          "default": "it",
+          "description": "Name of method to be folded"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "typescript": "^2.0.3",
+    "vscode": "^1.0.0",
+    "mocha": "^2.3.3",
+    "eslint": "^3.6.0",
+    "@types/node": "^6.0.40",
+    "@types/mocha": "^2.2.32"
+  }
+}
