@@ -7,7 +7,7 @@ function activate(context) {
   context.subscriptions.push(disposable);
 }
 
-function foldCommand() {
+async function foldCommand() {
   const methodsToFold = vscode.workspace
     .getConfiguration('foldIt')
     .get(METHODS_TO_FOLD_CONFIG_NAME);
@@ -16,19 +16,24 @@ function foldCommand() {
 
   const initialPosition = editor.selection.active.line;
 
-  methodsToFold.forEach(l => foldByMethodName(editor, l));
+  for (const m of methodsToFold) {
+    await foldByMethodName(editor, m)
+  }
+
   moveCursorTo(editor, initialPosition);
 }
 
-function foldByMethodName(editor, methodName) {
+async function foldByMethodName(editor, methodName) {
   const itLines = findLineNumbersByString(editor.document, methodName);
 
-  itLines.forEach(l => foldLine(editor, l));
+  for (const l of itLines) {
+    await foldLine(editor, l);
+  }
 }
 
-function foldLine(editor, lineNum) {
+async function foldLine(editor, lineNum) {
   moveCursorTo(editor, lineNum);
-  vscode.commands.executeCommand('editor.fold');
+  await vscode.commands.executeCommand('editor.fold');
 }
 
 function findLineNumbersByString(doc, specMethodName) {
