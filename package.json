@@ -2,7 +2,7 @@
   "name": "foldit",
   "displayName": "foldit",
   "description": "Fold your specs `it` statements",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "publisher": "alexpusch",
   "repository": "github:alexpusch/vscode-foldit",
   "engines": {
